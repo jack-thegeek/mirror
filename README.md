@@ -51,10 +51,6 @@ Check out our [website](https://eden-emu.dev) for the latest news on exciting fe
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/eden-emulator.svg)](https://repology.org/project/eden-emulator/versions)
 
-## Contribute
-
-To contribute to Eden; be it financially, code, bug reports, or otherwise, see our [Contributing guidelines](./CONTRIBUTING.md).
-
 ## Documentation
 
 We have a user manual! See our [User Handbook](./docs/user/README.md).
