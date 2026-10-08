@@ -160,6 +160,7 @@ static void OnStatusMessageReceived(const Network::StatusMessageEntry& msg) {
 struct SdlState {
     Core::System system{};
     std::unique_ptr<EmuWindow_SDL3> emu_window;
+    bool system_initialized = false;
 };
 
 extern "C" SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
@@ -201,6 +202,7 @@ extern "C" SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     }
 
     state->system.Initialize();
+    state->system_initialized = true;
 
     InputCommon::InputSubsystem input_subsystem{};
 
@@ -332,9 +334,11 @@ extern "C" SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 }
 extern "C" void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     SdlState *state = (SdlState *)appstate;
-    state->system.DetachDebugger();
-    void(state->system.Pause());
-    state->system.ShutdownMainProcess();
+    if (state->system_initialized) {
+        state->system.DetachDebugger();
+        void(state->system.Pause());
+        state->system.ShutdownMainProcess();
+    }
     delete state;
 }
 
