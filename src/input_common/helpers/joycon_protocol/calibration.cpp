@@ -208,6 +208,11 @@ u16 CalibrationProtocol::ValidateValue(u16 value, u16 default_value) const {
     if (value == 0xFFF) {
         return default_value;
     }
+    // Some third-party controllers (e.g. Betop KunPeng 20) return 0xFFFF in the
+    // SPI calibration block, which reads back as an uninitialized value.
+    if (value == 0xFFFF) {
+        return default_value;
+    }
     return value;
 }
 
@@ -216,6 +221,13 @@ s16 CalibrationProtocol::ValidateValue(s16 value, s16 default_value) const {
         return default_value;
     }
     if (value == 0xFFF) {
+        return default_value;
+    }
+    // Some third-party controllers (e.g. Betop KunPeng 20) return 0xFF for every
+    // byte of the SPI calibration block, which reads back as 0xFFFF (-1) here.
+    // Without this check, scale - offset would be zero and the IMU values would
+    // become inf/nan, making the gyro/accelerometer unusable.
+    if (value == -1) {
         return default_value;
     }
     return value;

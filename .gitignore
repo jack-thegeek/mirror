@@ -66,3 +66,11 @@ vulkansdk*.exe
 
 # Build-time generated external sources
 externals/generated
+
+# Code indexing / assistant tooling (local only)
+.codegraph/
+.serena/
+
+# Local build helper scripts & logs
+build_*.sh
+build_*.log

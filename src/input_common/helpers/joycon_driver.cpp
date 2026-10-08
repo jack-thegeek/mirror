@@ -102,6 +102,14 @@ Common::Input::DriverResult JoyconDriver::InitializeDevice() {
         if (handle_device_type == ControllerType::Pro) {
             // Some 3rd party controllers aren't pro controllers
             generic_protocol->GetControllerType(device_type);
+            // Some 3rd party controllers (e.g. Betop) report an invalid device
+            // type (0xFF) from the SPI DEVICE_TYPE region. The poller only
+            // handles Left/Right/Pro, so fall back to the type resolved from
+            // the VID/PID.
+            if (device_type != ControllerType::Left && device_type != ControllerType::Right &&
+                device_type != ControllerType::Pro) {
+                device_type = handle_device_type;
+            }
         } else {
             device_type = handle_device_type;
         }
